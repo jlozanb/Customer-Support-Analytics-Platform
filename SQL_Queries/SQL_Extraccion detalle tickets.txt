@@ -1,0 +1,23 @@
+1 Extraccion detalle tickets · SQL
+-- ============================================================================
+-- 01. Extraccion Detalle de Tickets
+-- Dataset caso a caso: para auditoria, reporting detallado y como base de
+-- las columnas calculadas del extracto plano (Hora, Finde, Mes Actual, etc)
+-- Tablas: Data_BD_Tickets, Data_BD_Agentes, Data_BD_Grupos
+-- ============================================================================
+SELECT
+  "public"."Tickets"."id_ext" AS "ID.Tickets",
+	DATE_TRUNC('minute', "public"."Tickets"."createdAt") AS "Creado",
+	DATE_TRUNC('minute', "public"."Tickets"."date_closed") AS "date_closed",
+	DATE_TRUNC('month', "public"."Tickets"."date_resolve") AS "date_resolve",
+	"public"."Tickets"."status" AS "Status",  
+	"Agents"."name" AS "Agents__name",
+	"Groups"."name" AS "Groups__name",
+	"public"."Tickets"."type" AS "type",
+	"public"."Tickets"."status" AS "status"
+FROM "public"."Tickets"
+	LEFT JOIN "public"."Agents" AS "Agents" ON "public"."Tickets"."requester_id" = "Agents"."id_ext" 
+	LEFT JOIN "public"."Groups" AS "Groups" ON "public"."Tickets"."group_id" = "Groups"."id_ext"
+WHERE "public"."Tickets"."createdAt" >= '2023-07-01'
+       AND "public"."Tickets"."requester_id" <> '2043096757774'
+GROUP BY  "ID.Tickets", "Creado", "date_closed", "date_resolve", "Status", "Agents__name", "Groups__name", "type", "status"

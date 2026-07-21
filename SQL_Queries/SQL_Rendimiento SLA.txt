@@ -1,0 +1,56 @@
+-- ============================================================================
+-- 03. Rendimiento SLA
+-- Tiempo medio de primera respuesta y tiempo medio de resolucion, por mes
+-- Tablas: Data_BD_Tickets, Data_BD_Fuentes
+-- ============================================================================
+WITH FirstResponse AS (
+    SELECT
+        DATE_TRUNC('month', t.created_at)::date AS Mes,
+        TO_CHAR(
+            justify_interval(
+                AVG(age(t.first_status_change, t.created_at))
+            ),
+            'DD "D" HH24 "H" MI "M"'
+        ) AS AvgFirstResponseTime
+    FROM public.Tickets t
+    LEFT JOIN public.Sources s
+        ON t.source = s.source
+    WHERE 
+        t.created_at >= NOW() - INTERVAL '60 days'
+        AND EXTRACT(EPOCH FROM age(t.first_status_change,t.created_at))/3600 BETWEEN 0 AND 240
+        AND t.type <> 'Llamadas'
+        AND s.name NOT IN ('Teléfono','Facebook')
+        AND t.group_id IS NOT NULL
+    GROUP BY DATE_TRUNC('month', t.created_at)
+),
+
+ResolutionTime AS (
+    SELECT
+        DATE_TRUNC('month', t.date_resolve)::date AS Mes,
+        TO_CHAR(
+            justify_interval(
+                AVG(age(t.updated_at,t.created_at))
+            ),
+            'DD "D" HH24 "H" MI "M"'
+        ) AS AvgResolutionTime
+    FROM public.Tickets t
+    WHERE
+        t.status IN (4,5)
+        AND t.date_resolve >= NOW() - INTERVAL '60 days'
+        AND EXTRACT(EPOCH FROM age(t.updated_at,t.created_at))/3600 < 500
+    GROUP BY DATE_TRUNC('month', t.date_resolve)
+)
+
+SELECT
+    'First Response Time' AS KPI,
+    Mes,
+    AvgFirstResponseTime AS Valor
+FROM FirstResponse
+
+UNION ALL
+
+SELECT
+    'Resolution Time' AS KPI,
+    Mes,
+    AvgResolutionTime AS Valor
+FROM ResolutionTime;

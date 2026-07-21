@@ -1,0 +1,36 @@
+-- ============================================================================
+-- 02. Rendimiento de Equipo
+-- Tickets abiertos, atendidos y resueltos por agente, en tres ventanas
+-- moviles de tiempo (24 horas, 7 dias, 30 dias)
+-- Tablas: Data_BD_Agentes, Data_BD_Tickets
+-- ============================================================================
+SELECT
+    "Agente",
+    COUNT(*) AS "Tickets",
+    "Intervalo",
+    "Tipo"
+FROM (
+    SELECT
+        "Agents"."name" AS "Agente",
+        CASE
+            WHEN ("Tickets"."date_resolve" >= DATE_TRUNC('hour', (NOW() + INTERVAL '-24 hour')))
+                 AND ("Tickets"."date_resolve" < DATE_TRUNC('hour', (NOW() + INTERVAL '1 hour'))) THEN 'Ultimas 24 horas'
+            WHEN ("Tickets"."date_resolve" >= DATE_TRUNC('day', (NOW() + INTERVAL '-7 day')))
+                 AND ("Tickets"."date_resolve" < DATE_TRUNC('day', (NOW() + INTERVAL '1 day'))) THEN 'Ultimos 7 dias'
+            ELSE 'Ultimos 30 dias'
+        END AS "Intervalo",
+        CASE
+            WHEN ("Tickets"."status" = 2)
+                 AND ("Tickets"."created_at" >= DATE_TRUNC('hour', (NOW() + INTERVAL '-24 hour')))
+                 AND ("Tickets"."created_at" < DATE_TRUNC('hour', (NOW() + INTERVAL '1 hour')))
+                 AND (("Agents"."name" <> 'Emanuel Britez') OR ("Agents"."name" IS NULL)) THEN 'Tickets Abiertos'
+            WHEN ("Tickets"."status" IN (3, 4, 5, 8))
+                 AND ("Tickets"."updated_at" >= DATE_TRUNC('hour', (NOW() + INTERVAL '-24 hour')))
+                 AND ("Tickets"."updated_at" < DATE_TRUNC('hour', (NOW() + INTERVAL '1 hour'))) THEN 'Tickets Atendidos'
+            ELSE 'Tickets Resueltos'
+        END AS "Tipo"
+    FROM "public"."Agents"
+    LEFT JOIN "public"."Tickets" AS "Tickets" ON "Agents"."id_ext" = "Tickets"."responder_id"
+) AS SubQuery
+GROUP BY "Agente", "Intervalo", "Tipo"
+ORDER BY "Agente", "Intervalo", "Tipo";
