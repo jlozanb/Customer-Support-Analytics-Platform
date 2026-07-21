@@ -68,17 +68,12 @@ The project aims to reduce manual reporting tasks, improve KPI visibility and en
 │   ├── support_data_sample.csv
 │   └── README.md
 │
-├── Python_Code
-│   ├── api_extraction.py
-│   ├── data_transformation.py
+├── PowerBI
+│   ├── Dashboard.pbix
 │   └── README.md
 │
 ├── SQL
 │   ├── queries.sql
-│   └── README.md
-│
-├── PowerBI
-│   ├── Dashboard.pbix
 │   └── README.md
 │
 └── README.md
