@@ -4,6 +4,7 @@
 -- moviles de tiempo (24 horas, 7 dias, 30 dias)
 -- Tablas: Data_BD_Agentes, Data_BD_Tickets
 -- ============================================================================
+
 SELECT
     "Agente",
     COUNT(*) AS "Tickets",
@@ -34,3 +35,5 @@ FROM (
 ) AS SubQuery
 GROUP BY "Agente", "Intervalo", "Tipo"
 ORDER BY "Agente", "Intervalo", "Tipo";
+
+
