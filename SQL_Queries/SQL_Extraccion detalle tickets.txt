@@ -20,4 +20,10 @@ FROM "public"."Tickets"
 	LEFT JOIN "public"."Groups" AS "Groups" ON "public"."Tickets"."group_id" = "Groups"."id_ext"
 WHERE "public"."Tickets"."createdAt" >= '2023-07-01'
        AND "public"."Tickets"."requester_id" <> '2043096757774'
-GROUP BY  "ID.Tickets", "Creado", "date_closed", "date_resolve", "Status", "Agents__name", "Groups__name", "type", "status"
+GROUP BY  "ID.Tickets", "Creado", "date_closed", "date_resolve", "Status", "Agents__name", "Groups__name", "type", "status";
+
+
+
+
+
+
