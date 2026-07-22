@@ -3,6 +3,7 @@
 -- Tiempo medio de primera respuesta y tiempo medio de resolucion, por mes
 -- Tablas: Data_BD_Tickets, Data_BD_Fuentes
 -- ============================================================================
+
 WITH FirstResponse AS (
     SELECT
         DATE_TRUNC('month', t.created_at)::date AS Mes,
@@ -54,3 +55,4 @@ SELECT
     Mes,
     AvgResolutionTime AS Valor
 FROM ResolutionTime;
+
