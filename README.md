@@ -1,8 +1,9 @@
 # Customer Support Analytics Platform
+
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=flat&logo=postgresql&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=flat&logo=powerbi&logoColor=black)
-![ETL](https://img.shields.io/badge/ETL-SQL%20%2B%20Power%20Query-6c757d)
-![KPI Design](https://img.shields.io/badge/KPI%20Design-6c757d)
+![KPIs](https://img.shields.io/badge/KPIs%20%26%20Performance%20Analytics-6c757d)
+![ETL](https://img.shields.io/badge/ETL%20%26%20Data%20Transformation-6c757d)
  
 ## Overview
 Customer support analytics project built on top of a ticketing system database
