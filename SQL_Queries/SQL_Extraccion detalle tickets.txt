@@ -5,6 +5,7 @@
 -- las columnas calculadas del extracto plano (Hora, Finde, Mes Actual, etc)
 -- Tablas: Data_BD_Tickets, Data_BD_Agentes, Data_BD_Grupos
 -- ============================================================================
+
 SELECT
   "public"."Tickets"."id_ext" AS "ID.Tickets",
 	DATE_TRUNC('minute', "public"."Tickets"."createdAt") AS "Creado",
@@ -21,9 +22,4 @@ FROM "public"."Tickets"
 WHERE "public"."Tickets"."createdAt" >= '2023-07-01'
        AND "public"."Tickets"."requester_id" <> '2043096757774'
 GROUP BY  "ID.Tickets", "Creado", "date_closed", "date_resolve", "Status", "Agents__name", "Groups__name", "type", "status";
-
-
-
-
-
 
